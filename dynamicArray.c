@@ -273,10 +273,9 @@ void removeAtDynArr(DynArr *v, int idx)
 */
 int isEmptyDynArr(DynArr *v)
 {
-	/* FIXME: You will write this function */
+    int returnVal = (sizeDynArr(v) > 1) ? 0 : 1;
 	
-	/* FIXME:  You will change this return value*/
-	return 1;
+	return returnVal;
 }
 
 /* 	Push an element onto the top of the stack
@@ -290,7 +289,7 @@ int isEmptyDynArr(DynArr *v)
 */
 void pushDynArr(DynArr *v, TYPE val)
 {
-	/* FIXME: You will write this function */
+    addDynArr(v, val);
 }
 
 /*	Returns the element at the top of the stack 
@@ -302,10 +301,10 @@ void pushDynArr(DynArr *v, TYPE val)
 */
 TYPE topDynArr(DynArr *v)
 {
-	/* FIXME: You will write this function */
-	
-	/* FIXME: You will change this return value*/
-	return 1;
+    
+    TYPE returnVal = getDynArr(v, (v->size - 1));
+    
+	return returnVal;
 }
 
 /* Removes the element on top of the stack 
@@ -318,7 +317,7 @@ TYPE topDynArr(DynArr *v)
 */
 void popDynArr(DynArr *v)
 {
-	/* FIXME: You will write this function */
+    removeAtDynArr(v, (v->size - 1));
 }
 
 /* ************************************************************************
