@@ -324,6 +324,31 @@ void popDynArr(DynArr *v)
 	Bag Interface Functions
 ************************************************************************ */
 
+/*	Returns index of first occurence of val in DynArr if it 
+    is in the array. Returns -1 if the array does not contain val.
+ 
+	param:	v		pointer to the dynamic array
+	param:	val		the value to look for in the bag
+	pre:	v is not null
+	pre:	v is not empty
+	post:	no changes to the bag
+ */
+
+int _containsDynArrAtIndex(DynArr *v, TYPE val) {
+    
+    int occurrence = -1;
+    
+    for (int i = 0; i < v->size; i++) {
+        
+        if (EQ(v->data[i], val)) {
+            occurrence = i;
+            break;
+        }
+    }
+    
+    return occurrence;
+}
+
 /*	Returns boolean (encoded as an int) demonstrating whether or not
 	the specified value is in the collection
 	true = 1
@@ -337,11 +362,10 @@ void popDynArr(DynArr *v)
 */
 int containsDynArr(DynArr *v, TYPE val)
 {
-	/* FIXME: You will write this function */
-	
-	/* FIXME:  You will change this return value */
-	return 1;
+ 
+    int returnVal = (_containsDynArrAtIndex(v, val) != -1) ? 1 : 0;
 
+    return returnVal;
 }
 
 /*	Removes the first occurrence of the specified value from the collection
@@ -356,5 +380,16 @@ int containsDynArr(DynArr *v, TYPE val)
 */
 void removeDynArr(DynArr *v, TYPE val)
 {
-	/* FIXME: You will write this function */
+    
+    int occurrence = _containsDynArrAtIndex(v, val);
+    
+    if (occurrence != -1) {
+        
+        for (int i = (occurrence + 1); i < v->size; i++) {
+            v->data[i-1] = v->data[i];
+        }
+        
+        v->size--;
+        
+    }
 }
