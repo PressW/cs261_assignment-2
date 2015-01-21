@@ -1,6 +1,7 @@
 /*	dynamicArray.c: Dynamic Array implementation. */
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "dynamicArray.h"
 
 struct DynArr
@@ -91,8 +92,26 @@ void deleteDynArr(DynArr *v)
 	post:	v has capacity newCap
 */
 void _dynArrSetCapacity(DynArr *v, int newCap)
-{	
-	/* FIXME: You will write this function */
+{
+
+    //allocate
+    TYPE *temp = (TYPE*)malloc(newCap * TYPE_SIZE);
+
+    if (temp == 0) {
+        printf("Error allocating memory for DynArr of capacity %d. Goodbye.\n", newCap);
+        exit(1);
+    }
+    
+    //copy array elts
+    for (int i = 0; i < v->size; i++) {
+        temp[i] = v->data[i];
+    }
+    
+    //re-assign DynArr ptr & free memory
+    free(v->data);
+    v->data = temp;
+    
+    v->capacity = newCap;
 	
 }
 
@@ -119,7 +138,13 @@ int sizeDynArr(DynArr *v)
 */
 void addDynArr(DynArr *v, TYPE val)
 {
-	/* FIXME: You will write this function */
+    
+    //if full, double size
+    if EQ(v->size, v->capacity)
+        _dynArrSetCapacity(v, (2 * v->size));
+    
+    v->data[v->size] = val;
+    v->size++;
 
 }
 
@@ -136,10 +161,18 @@ void addDynArr(DynArr *v, TYPE val)
 
 TYPE getDynArr(DynArr *v, int pos)
 {
-	/* FIXME: You will write this function */
-
-	/* FIXME: you must change this return value */
-	return 1; 
+    
+    if (pos < 0) {
+        printf("Error. Tried to access element at index < 0 in DynArr. Goodbye.\n");
+        exit(2);
+    }
+    
+    if (pos >= v->size) {
+        printf("Error. Tried to access element at index that doesn't exist in DynArr, ie index >= size. Goodbye.\n");
+        exit(3);
+    }
+    
+    return v->data[pos];
 }
 
 /*	Put an item into the dynamic array at the specified location,
@@ -155,7 +188,17 @@ TYPE getDynArr(DynArr *v, int pos)
 */
 void putDynArr(DynArr *v, int pos, TYPE val)
 {
-	/* FIXME: You will write this function */
+    if (pos < 0) {
+        printf("Error. Tried to access element at index < 0 in DynArr. Goodbye.\n");
+        exit(4);
+    }
+    
+    if (pos >= v->size) {
+        printf("Error. Tried to access element at index that doesn't exist in DynArr, ie index >= size. Goodbye.\n");
+        exit(5);
+    }
+    
+    v->data[pos] = val;
 }
 
 /*	Swap two specified elements in the dynamic array
@@ -169,7 +212,19 @@ void putDynArr(DynArr *v, int pos, TYPE val)
 */
 void swapDynArr(DynArr *v, int i, int  j)
 {
-	/* FIXME: You will write this function */
+    if (i < 0 || j < 0) {
+        printf("Error. Tried to swap elements where one or more has index < 0 in DynArr. Goodbye.\n");
+        exit(6);
+    }
+    
+    if (i >= v->size || j >= v->size) {
+        printf("Error. Tried to swap elements where one or more doesn't exist in DynArr, ie index >= size. Goodbye.\n");
+        exit(7);
+    }
+    
+    TYPE temp = v->data[i];
+    v->data[i] = v->data[j];
+    v->data[j] = temp;
 }
 
 /*	Remove the element at the specified location from the array,
@@ -185,7 +240,21 @@ void swapDynArr(DynArr *v, int i, int  j)
 */
 void removeAtDynArr(DynArr *v, int idx)
 {
-	/* FIXME: You will write this function */
+    if (idx < 0) {
+        printf("Error. Tried to access element at index = %d < 0 in removeAtDynArr. Goodbye.\n", idx);
+        exit(8);
+    }
+    
+    if (idx >= v->size) {
+        printf("Error. Tried to access element at index that doesn't exist in DynArr, ie index >= size. Goodbye.\n");
+        exit(9);
+    }
+    
+    for (int i = (idx + 1); i < v->size; i++) {
+        v->data[i-1] = v->data[i];
+    }
+
+    v->size--;
 }
 
 

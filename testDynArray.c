@@ -25,7 +25,7 @@ int main(int argc, char* argv[]){
 	dyn = createDynArr(2);
 	
 	printf("\n\nTesting addDynArr...\n");
-	addDynArr(dyn, 3);
+    addDynArr(dyn, 3);
 	addDynArr(dyn, 4);
 	addDynArr(dyn, 10);
 	addDynArr(dyn, 5);
