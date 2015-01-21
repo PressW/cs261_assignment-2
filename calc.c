@@ -40,7 +40,25 @@ int isNumber(char *s, double *num)
 */
 void add (struct DynArr *stack)
 {
-	/* FIXME: You will write this function */
+    double first, second;
+    
+    if (isEmptyDynArr(stack)) {
+        printf("Error! You have provided too few operands. Goodbye.\n");
+        exit(2);
+    }
+    second = topDynArr(stack);
+    //remove top element
+    popDynArr(stack);
+    
+    if (isEmptyDynArr(stack)) {
+        printf("Error! You have provided too few operands. Goodbye.\n");
+        exit(3);
+    }
+    first = topDynArr(stack);
+    //remove top element
+    popDynArr(stack);
+    
+    pushDynArr(stack, (first + second));
 }
 
 /*	param: stack the stack being manipulated
@@ -50,7 +68,25 @@ void add (struct DynArr *stack)
 */
 void subtract(struct DynArr *stack)
 {
-	/* FIXME: You will write this function */
+    double first, second;
+    
+    if (isEmptyDynArr(stack)) {
+        printf("Error! You have provided too few operands. Goodbye.\n");
+        exit(4);
+    }
+    second = topDynArr(stack);
+    //remove top element
+    popDynArr(stack);
+    
+    if (isEmptyDynArr(stack)) {
+        printf("Error! You have provided too few operands. Goodbye.\n");
+        exit(5);
+    }
+    first = topDynArr(stack);
+    //remove top element
+    popDynArr(stack);
+    
+    pushDynArr(stack, (first - second));
 }
 
 /*	param: stack the stack being manipulated
@@ -60,13 +96,79 @@ void subtract(struct DynArr *stack)
 */
 void divide(struct DynArr *stack)
 {
-	/* FIXME: You will write this function */
+    double first, second;
+    
+    if (isEmptyDynArr(stack)) {
+        printf("Error! You have provided too few operands. Goodbye.\n");
+        exit(6);
+    }
+    second = topDynArr(stack);
+    //remove top element
+    popDynArr(stack);
+    
+    if (isEmptyDynArr(stack)) {
+        printf("Error! You have provided too few operands. Goodbye.\n");
+        exit(7);
+    }
+    first = topDynArr(stack);
+    //remove top element
+    popDynArr(stack);
+    
+    pushDynArr(stack, (first / second));
+}
+
+/*	param: stack the stack being manipulated
+	pre: the stack contains at least two elements
+	post: the top two elements are popped and
+	their sum is pushed back onto the stack.
+ */
+void opForSingleOperand(struct DynArr *stack, int opCode) {
+    
+    double first;
+    
+    if (isEmptyDynArr(stack)) {
+        printf("Error! You have provided too few operands. Goodbye.\n");
+        exit(6);
+    }
+    first = topDynArr(stack);
+    //remove top element
+    popDynArr(stack);
+    
+    switch (opCode) {
+        case(1):
+            pushDynArr(stack, pow(first, 2));
+            break;
+        
+        case(2):
+            pushDynArr(stack, pow(first, 3));
+            break;
+            
+        case(3):
+            pushDynArr(stack, fabs(first));
+            break;
+            
+        case(4):
+            pushDynArr(stack, sqrt(first));
+            break;
+            
+        case(5):
+            pushDynArr(stack, pow(M_E, first));
+            break;
+            
+        case(6):
+            pushDynArr(stack, log(first));
+            break;
+            
+        case(7):
+            pushDynArr(stack, log10(first));
+            break;
+    }
 }
 
 double calculate(int numInputTokens, char **inputString)
 {
 	int i;
-	double result = 0.0;
+	double result = 0.0, *number = (double*)malloc(sizeof(double));
 	char *s;
 	struct DynArr *stack;
 
@@ -87,41 +189,63 @@ double calculate(int numInputTokens, char **inputString)
 
 		if(strcmp(s, "+") == 0)
 			add(stack);
-		else if(strcmp(s,"-") == 0)
+		
+        else if(strcmp(s,"-") == 0)
 			subtract(stack);
-		else if(strcmp(s, "/") == 0)
+		
+        else if(strcmp(s, "/") == 0)
 			divide(stack);
-		else if(strcmp(s, "x") == 0)
+		
+        else if(strcmp(s, "x") == 0) // ////////
 			/* FIXME: replace printf with your own function */
 			printf("Multiplying\n");
-		else if(strcmp(s, "^") == 0)
+		
+        else if(strcmp(s, "^") == 0) // ////////
 			/* FIXME: replace printf with your own function */
 			printf("Power\n");
-		else if(strcmp(s, "^2") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Squaring\n");
-		else if(strcmp(s, "^3") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Cubing\n");
-		else if(strcmp(s, "abs") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Absolute value\n");
-		else if(strcmp(s, "sqrt") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Square root\n");
-		else if(strcmp(s, "exp") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Exponential\n");
-		else if(strcmp(s, "ln") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Natural Log\n");
-		else if(strcmp(s, "log") == 0)
-			/* FIXME: replace printf with your own function */
-			printf("Log\n");
-		else 
+		
+        else if(strcmp(s, "^2") == 0)
+            opForSingleOperand(stack, 1);
+        
+        else if(strcmp(s, "^3") == 0)
+			opForSingleOperand(stack, 2);
+        
+        else if(strcmp(s, "abs") == 0)
+			opForSingleOperand(stack, 3);
+		
+        else if(strcmp(s, "sqrt") == 0)
+			opForSingleOperand(stack, 4);
+		
+        else if(strcmp(s, "exp") == 0)
+			opForSingleOperand(stack, 5);
+		
+        else if(strcmp(s, "ln") == 0)
+			opForSingleOperand(stack, 6);
+		
+        else if(strcmp(s, "log") == 0)
+			opForSingleOperand(stack, 7);
+		
+        else
 		{
-			// FIXME: You need to develop the code here (when s is not an operator)
-			// Remember to deal with special values ("pi" and "e")
+            
+            if (strcmp(s, "pi") == 0) {
+                pushDynArr(stack, M_PI);
+            }
+            else if (strcmp(s, "e") == 0) {
+                pushDynArr(stack, M_E);
+            }
+            else if (isNumber(s, number)) {
+                pushDynArr(stack, *number);
+                if (i == (numInputTokens - 1)) {
+                    printf("Error! You have entered too few operators. Goodbye.\n");
+                    exit(8);
+                }
+            }
+            else {
+                printf("Error! You have entered an invalid argument: %s. Goodbye.\n", s);
+                exit(1);
+            }
+            
 			
 		}
 	}	//end for 

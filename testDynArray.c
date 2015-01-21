@@ -17,6 +17,41 @@ void assertTrue(int predicate, char *message)
 		printf("FAILED\n");
 }
 
+void dynArrTestScript(DynArr *dyn) {
+    
+    printf("Creating DynArr with cap 1...\n");
+    dyn = createDynArr(1);
+    
+    printf("Adding numbers 0 - 999 to dyn @ index 0 - 999...\n");
+    for (int i = 0; i < 1000; i++) {
+        addDynArr(dyn, i);
+    }
+    printf("dyn == [0, 1, 2, ... , 997, 998, 999]\n");
+    assertTrue(sizeDynArr(dyn) == 1000, "Test size = 1000");
+    assertTrue(EQ(getDynArr(dyn, 499), 499), "Test 499th element == 499");
+    assertTrue(EQ(getDynArr(dyn, 782), 782), "Test 782nd element == 782");
+    
+    printf("Removing all values from dyn...\n");
+    for (int i = 999; i >= 0; i--) {
+        removeAtDynArr(dyn, i);
+    }
+    assertTrue(sizeDynArr(dyn) == 0, "Test size == 0");
+    
+    printf("Now dyn has size 0 and capacity 1024. Adding values to dyn 1999 - 0 @ index 0 - 1999...\n");
+    for (int i = 1999; i >= 0; i--) {
+        addDynArr(dyn, i);
+    }
+    printf("dyn == [1999, 1998, ... , 3, 2, 1]\n");
+    assertTrue(sizeDynArr(dyn) == 2000, "Test size == 2000");
+    assertTrue(EQ(getDynArr(dyn, 0), 1999), "Test 0th element == 1999");
+    assertTrue(EQ(getDynArr(dyn, 1999), 0), "Test 1999th element == 0");
+    
+    printf("Swapping, calling swapDynArr(dyn, 0, 1999)...\n");
+    swapDynArr(dyn, 0, 1999);
+    assertTrue(EQ(getDynArr(dyn, 0), 0), "Test 0th element == 0");
+    assertTrue(EQ(getDynArr(dyn, 1999), 1999), "Test 1999th element == 1999");
+
+}
 
 // this main function contains some
 int main(int argc, char* argv[]){
@@ -82,6 +117,11 @@ int main(int argc, char* argv[]){
 	removeDynArr(dyn, 3);
 	printf("Removing 3...\nThe stack's content: [6,5,9]\n");
 	assertTrue(!containsDynArr(dyn, 3), "Test not containing 3");
+    
+    printf("\n\nFreeing dyn and calling dynArrTestScript(dyn)...\n");
+
+    deleteDynArr(dyn);
+    dynArrTestScript(dyn);
 	
 	return 0;
 }

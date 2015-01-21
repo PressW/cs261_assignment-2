@@ -273,7 +273,7 @@ void removeAtDynArr(DynArr *v, int idx)
 */
 int isEmptyDynArr(DynArr *v)
 {
-    int returnVal = (sizeDynArr(v) > 1) ? 0 : 1;
+    int returnVal = (sizeDynArr(v) >= 1) ? 0 : 1;
 	
 	return returnVal;
 }
