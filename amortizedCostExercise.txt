@@ -1,0 +1,34 @@
+1. 	16 consecutive push operations = 24 cost units when the array doubles
+	32 consecutive push operations = 48 cost units when the array doubles
+	Big O (1+) -> Amortized Constant Time.
+
+
+2. 	48 unit costs to complete 16 consecutive pushes when the array grows by 2.
+	128 unit costs to complete 32 consecutive pushes when the array grows by 2.
+	Big O (N)
+	
+
+3. 	If the initial capacity is N/2, then running a pop sequence first should shrink the array. Thus, an alternating sequence of 2 pop() functions followed by 2 push() functions would cause the number of elements to be continually copied back and forth between arrays.
+
+
+pop() 	-> N+1 operations to shrink array and copy (1 less than cap)
+push()	-> 1 operation to add (equal to cap)
+push()  -> N+1 operation to add and double array (1 more than half)
+pop()	-> 1 operation to remove
+pop()	-> N+1 operations to shrink array and copy (1 less than cap)
+push()	-> 1 operation to add (equal to cap)
+push()  -> N+1 operation to add and double array (1 more than half)
+pop()	-> 1 operation to remove
+pop()	-> N+1 operations to shrink array and copy (1 less than cap)
+push()	-> 1 operation to add (equal to cap)
+push()  -> N+1 operation to add and double array (1 more than half)
+pop()	-> 1 operation to remove
+pop()	-> N+1 operations to shrink array and copy (1 less than cap)
+push()	-> 1 operation to add (equal to cap)
+push()  -> N+1 operation to add and double array (1 more than half)
+pop()	-> 1 operation to remove
+pop()	-> N+1 operations to shrink array and copy (1 less than cap)
+
+One way to fix the performance would be to set the shrink function to reduce the array to 3/4 the capacity when size is less than or equal to half of the capacity and increase the array capacity by 1.5 times when its size is becomes equal to capacity.
+
+Another way to fix this would be to set the shrink function to reduce the array capacity by 1/2 only when the size reaches 1/4 of the current capacity.
