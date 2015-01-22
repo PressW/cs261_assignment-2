@@ -38,7 +38,7 @@ int isNumber(char *s, double *num)
 	post: the top two elements are popped and 
 	their sum is pushed back onto the stack.
 */
-void add (struct DynArr *stack)
+void add(struct DynArr *stack)
 {
     double first, second;
     
@@ -117,18 +117,70 @@ void divide(struct DynArr *stack)
     pushDynArr(stack, (first / second));
 }
 
-/*	param: stack the stack being manipulated
-	pre: the stack contains at least two elements
-	post: the top two elements are popped and
-	their sum is pushed back onto the stack.
+/*	param:  stack the stack being manipulated, opCode, integer code to specify operation
+            opCodes:
+                     1       x * y
+                     2       x^y
+	pre:    the stack contains at least two elements
+	post:   the top two element are popped and replaced w/the result of performing
+            the specified operation on them
  */
+void opForDoubleOperand(struct DynArr *stack, int opCode) {
+
+    double first, second;
+    
+    if (isEmptyDynArr(stack)) {
+        printf("Error! You have provided too few operands. Goodbye.\n");
+        exit(9);
+    }
+    second = topDynArr(stack);
+    //remove top element
+    popDynArr(stack);
+    
+    if (isEmptyDynArr(stack)) {
+        printf("Error! You have provided too few operands. Goodbye.\n");
+        exit(10);
+    }
+    first = topDynArr(stack);
+    //remove top element
+    popDynArr(stack);
+    
+    switch (opCode) {
+        case(1):
+            pushDynArr(stack, (first * second));
+            break;
+            
+        case(2):
+            pushDynArr(stack, pow(first, second));
+            break;
+        
+        default:
+            printf("Error. Invalid argument opCode passed to opForDoubleOperand. Goodbye.");
+            exit(11);
+    }
+}
+
+/*	param:  stack the stack being manipulated, opCode, integer code to specify operation
+            opCodes:
+                    1       ^2
+                    2       ^3
+                    3       abs
+                    4       sqrt
+                    5       exp
+                    6       ln
+                    7       log base 10
+                    other:  error - kill program
+	pre:    the stack contains at least one element
+	post:   the top element is popped and replaced w/the result of performing
+            the specified operation on the top element
+*/
 void opForSingleOperand(struct DynArr *stack, int opCode) {
     
     double first;
     
     if (isEmptyDynArr(stack)) {
         printf("Error! You have provided too few operands. Goodbye.\n");
-        exit(6);
+        exit(12);
     }
     first = topDynArr(stack);
     //remove top element
@@ -162,7 +214,16 @@ void opForSingleOperand(struct DynArr *stack, int opCode) {
         case(7):
             pushDynArr(stack, log10(first));
             break;
+
+        default:
+            printf("Error. Invalid argument opCode passed to opForSingleOperand. Goodbye.");
+            exit(13);
     }
+}
+
+void numError(int errorCode) {
+    printf("Error! You have entered too few operators. Goodbye.\n");
+    exit(errorCode);
 }
 
 double calculate(int numInputTokens, char **inputString)
@@ -196,14 +257,12 @@ double calculate(int numInputTokens, char **inputString)
         else if(strcmp(s, "/") == 0)
 			divide(stack);
 		
-        else if(strcmp(s, "x") == 0) // ////////
-			/* FIXME: replace printf with your own function */
-			printf("Multiplying\n");
-		
-        else if(strcmp(s, "^") == 0) // ////////
-			/* FIXME: replace printf with your own function */
-			printf("Power\n");
-		
+        else if(strcmp(s, "x") == 0)
+            opForDoubleOperand(stack, 1);
+            
+        else if(strcmp(s, "^") == 0)
+            opForDoubleOperand(stack, 2);
+        
         else if(strcmp(s, "^2") == 0)
             opForSingleOperand(stack, 1);
         
@@ -230,15 +289,25 @@ double calculate(int numInputTokens, char **inputString)
             
             if (strcmp(s, "pi") == 0) {
                 pushDynArr(stack, M_PI);
+                
+                if (i == (numInputTokens - 1)) {
+                    numError(14);
+                }
+
             }
             else if (strcmp(s, "e") == 0) {
                 pushDynArr(stack, M_E);
+                
+                if (i == (numInputTokens - 1)) {
+                    numError(15);
+                }
+
             }
             else if (isNumber(s, number)) {
                 pushDynArr(stack, *number);
+
                 if (i == (numInputTokens - 1)) {
-                    printf("Error! You have entered too few operators. Goodbye.\n");
-                    exit(8);
+                    numError(8);
                 }
             }
             else {
@@ -248,12 +317,16 @@ double calculate(int numInputTokens, char **inputString)
             
 			
 		}
-	}	//end for 
-
-	/* FIXME: You will write this part of the function (2 steps below) 
-	 * (1) Check if everything looks OK and produce an error if needed.
-	 * (2) Store the final value in result and print it out.
-	 */
+	}	//end for
+    
+    //there should only be one element in stack at this point
+    if (isEmptyDynArr(stack) || sizeDynArr(stack) > 1) {
+        printf("Error! There is more than 1 element in your stack after performing all operations. Goodbye.\n");
+        exit(16);
+    }
+    
+    result = topDynArr(stack);
+    printf("The result of your operation is: %.02f\n", result);
 	
 	return result;
 }
