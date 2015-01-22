@@ -136,6 +136,26 @@ void bagInterfaceTestScript(DynArr *dyn) {
     printf("\nCreating DynArr with cap 99...\n");
     dyn = createDynArr(99);
     
+    printf("\nAdding numbers 99 - 0 to dyn @ index 0 - 99 using pushDynArr...\n");
+    for (int i = 0; i < 100; i++) {
+        pushDynArr(dyn, i);
+    }
+    printf("dyn == [99, 98, 97, ... , 2, 1, 0]\n");
+    
+    assertTrue(containsDynArr(dyn, 0), "Test containing 0");
+    assertTrue(containsDynArr(dyn, 99), "Test containing 99");
+    assertTrue(containsDynArr(dyn, 57), "Test containing 57");
+    
+    printf("\nRemoving 0, 99, 57 from dyn using removeDynArr...\n");
+
+    removeDynArr(dyn, 0);
+    removeDynArr(dyn, 99);
+    removeDynArr(dyn, 57);
+    
+    assertTrue(!containsDynArr(dyn, 0), "Test doesn't contain 0");
+    assertTrue(!containsDynArr(dyn, 99), "Test doesn't contain 99");
+    assertTrue(!containsDynArr(dyn, 57), "Test doesn't contain 57");
+    
     deleteDynArr(dyn);
 }
 
