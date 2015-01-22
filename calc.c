@@ -241,13 +241,6 @@ double calculate(int numInputTokens, char **inputString)
 	{
 		s = inputString[i];
 
-		// Hint: General algorithm:
-		// (1) Check if the string s is in the list of operators.
-		//   (1a) If it is, perform corresponding operations.
-		//   (1b) Otherwise, check if s is a number.
-		//     (1b - I) If s is not a number, produce an error.
-		//     (1b - II) If s is a number, push it onto the stack
-
 		if(strcmp(s, "+") == 0)
 			add(stack);
 		
@@ -327,6 +320,8 @@ double calculate(int numInputTokens, char **inputString)
     
     result = topDynArr(stack);
     printf("The result of your operation is: %.02f\n", result);
+    
+    deleteDynArr(stack);
 	
 	return result;
 }
