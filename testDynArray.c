@@ -18,6 +18,12 @@ void assertTrue(int predicate, char *message)
 		printf("FAILED\n");
 }
 
+/*	Additional test script to that given in main - called when prog is run w/o any arguments
+ 
+	param: 	dyn pointer to DynArr
+	pre:	dyn is a pointer to a DynArr - not allocated/uninitialized
+	post:	dyn has been freed
+*/
 void dynArrTestScript(DynArr *dyn) {
     
     printf("Creating DynArr with cap 1...\n");
@@ -51,8 +57,17 @@ void dynArrTestScript(DynArr *dyn) {
     swapDynArr(dyn, 0, 1999);
     assertTrue(EQ(getDynArr(dyn, 0), 0), "Test 0th element == 0");
     assertTrue(EQ(getDynArr(dyn, 1999), 1999), "Test 1999th element == 1999");
+    
+    deleteDynArr(dyn);
 }
 
+/*	Function to test calling putDynArr() by giving it an index > size
+    execute this function by running testDynArray.c with argument putHigh (no quotes)
+ 
+	param: 	none
+	pre:	none
+	post:	program will be killed by putDynArr()
+ */
 void testPutHigh() {
     
     DynArr *dyn;
@@ -64,6 +79,13 @@ void testPutHigh() {
     putDynArr(dyn, 2, 5);
 }
 
+/*	Function to test calling putDynArr() by giving it an index < 0
+    execute this function by running testDynArray.c with argument putLow (no quotes)
+ 
+	param: 	none
+	pre:	none
+	post:	program will be killed by putDynArr()
+*/
 void testPutLow() {
 
     DynArr *dyn;
@@ -75,6 +97,13 @@ void testPutLow() {
     putDynArr(dyn, -1, 6);
 }
 
+/*	Function to test calling removeAtDynArr() by giving it an index > size
+    execute this function by running testDynArray.c with argument remHigh (no quotes)
+ 
+	param: 	none
+	pre:	none
+	post:	program will be killed by removeAtDynArr()
+*/
 void testRemoveHigh() {
   
     DynArr *dyn;
@@ -86,6 +115,13 @@ void testRemoveHigh() {
     removeAtDynArr(dyn, 5);
 }
 
+/*	Function to test calling removeAtDynArr() by giving it an index < 0
+    execute this function by running testDynArray.c with argument remLow (no quotes)
+ 
+	param: 	none
+	pre:	none
+	post:	program will be killed by removeAtDynArr()
+*/
 void testRemoveLow() {
     
     DynArr *dyn;
