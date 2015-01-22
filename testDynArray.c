@@ -19,6 +19,7 @@ void assertTrue(int predicate, char *message)
 }
 
 /*	Additional test script to that given in main - called when prog is run w/o any arguments
+    tests dynamic array
  
 	param: 	dyn pointer to DynArr
 	pre:	dyn is a pointer to a DynArr - not allocated/uninitialized
@@ -29,7 +30,7 @@ void dynArrTestScript(DynArr *dyn) {
     printf("Creating DynArr with cap 1...\n");
     dyn = createDynArr(1);
     
-    printf("Adding numbers 0 - 999 to dyn @ index 0 - 999...\n");
+    printf("\nAdding numbers 0 - 999 to dyn @ index 0 - 999...\n");
     for (int i = 0; i < 1000; i++) {
         addDynArr(dyn, i);
     }
@@ -38,25 +39,102 @@ void dynArrTestScript(DynArr *dyn) {
     assertTrue(EQ(getDynArr(dyn, 499), 499), "Test 499th element == 499");
     assertTrue(EQ(getDynArr(dyn, 782), 782), "Test 782nd element == 782");
     
-    printf("Removing all values from dyn...\n");
+    printf("\nRemoving all values from dyn...\n");
     for (int i = 999; i >= 0; i--) {
         removeAtDynArr(dyn, i);
     }
     assertTrue(sizeDynArr(dyn) == 0, "Test size == 0");
     
-    printf("Now dyn has size 0 and capacity 1024. Adding values to dyn 1999 - 0 @ index 0 - 1999...\n");
+    printf("\nNow dyn has size 0 and capacity 1024. Adding values to dyn 1999 - 0 @ index 0 - 1999...\n");
     for (int i = 1999; i >= 0; i--) {
         addDynArr(dyn, i);
     }
-    printf("dyn == [1999, 1998, ... , 3, 2, 1]\n");
+    printf("dyn == [1999, 1998, ... , 3, 2, 1, 0]\n");
     assertTrue(sizeDynArr(dyn) == 2000, "Test size == 2000");
     assertTrue(EQ(getDynArr(dyn, 0), 1999), "Test 0th element == 1999");
     assertTrue(EQ(getDynArr(dyn, 1999), 0), "Test 1999th element == 0");
     
-    printf("Swapping, calling swapDynArr(dyn, 0, 1999)...\n");
+    printf("\nSwapping, calling swapDynArr(dyn, 0, 1999)...\n");
     swapDynArr(dyn, 0, 1999);
     assertTrue(EQ(getDynArr(dyn, 0), 0), "Test 0th element == 0");
     assertTrue(EQ(getDynArr(dyn, 1999), 1999), "Test 1999th element == 1999");
+    
+    printf("\nCalling putDynArr(dyn, 0, 500)...\n");
+    putDynArr(dyn, 0, 500);
+    assertTrue(EQ(getDynArr(dyn, 0), 500), "Test 0th element == 500");
+
+    printf("\nCalling putDynArr(dyn, 1999, 500)...\n");
+    putDynArr(dyn, 1999, 500);
+    assertTrue(EQ(getDynArr(dyn, 1999), 500), "Test 1999th element == 500");
+
+    printf("\nCalling putDynArr(dyn, 788, 500)...\n");
+    putDynArr(dyn, 788, 500);
+    assertTrue(EQ(getDynArr(dyn, 788), 500), "Test 788th element == 500");
+    
+    printf("\nCalling removeAtDynArr(dyn, 1999)...\n");
+    removeAtDynArr(dyn, 1999);
+    assertTrue(sizeDynArr(dyn) == 1999, "Test size == 1999");
+    printf("The 1999th element in dyn is: %.02f\n", getDynArr(dyn, 1998));
+    
+    printf("\nCalling removeAtDynArr(dyn, 0)...\n");
+    removeAtDynArr(dyn, 0);
+    assertTrue(sizeDynArr(dyn) == 1998, "Test size == 1998");
+    assertTrue(EQ(getDynArr(dyn, 1997), 1), "Test 1998th element == 1\n  (slid back from 1999th element, after removing first elt");
+    
+    deleteDynArr(dyn);
+}
+
+/*	Additional test script to that given in main - called when prog is run w/o any arguments
+    tests stack ADT interface for DynArr
+ 
+	param: 	dyn pointer to DynArr
+	pre:	dyn is a pointer to a DynArr - not allocated/uninitialized
+	post:	dyn has been freed
+*/
+void stackInterfaceTestScript(DynArr *dyn) {
+    
+    printf("\n\nTesting stack interface...\n");
+    
+    printf("\nCreating DynArr with cap 9...\n");
+    dyn = createDynArr(9);
+
+    assertTrue(isEmptyDynArr(dyn), "Testing isEmptyDynArr == true");
+    
+    printf("\nAdding numbers 0 - 99 to dyn @ index 0 - 99 using pushDynArr...\n");
+    for (int i = 0; i < 100; i++) {
+        pushDynArr(dyn, i);
+    }
+    printf("dyn == [0, 1, 2, ... , 97, 98, 99]\n");
+    
+    assertTrue(!isEmptyDynArr(dyn), "Testing isEmptyDynArr == false");
+    assertTrue(EQ(topDynArr(dyn), 99), "Test topDynArr == 99");
+    
+    printf("\nPopping top element of dyn...\n");
+    popDynArr(dyn);
+    assertTrue(EQ(topDynArr(dyn), 98), "Test topDynArr == 98");
+    
+    printf("\nPopping remaining 99 elements of dyn...\n");
+    for (int i = 0; i < 99; i++) {
+        popDynArr(dyn);
+    }
+    assertTrue(isEmptyDynArr(dyn), "Testing isEmptyDynArr == true");
+
+    deleteDynArr(dyn);
+}
+
+/*	Additional test script to that given in main - called when prog is run w/o any arguments
+    tests bag ADT interface for DynArr
+ 
+	param: 	dyn pointer to DynArr
+	pre:	dyn is a pointer to a DynArr - not allocated/uninitialized
+	post:	dyn has been freed
+ */
+void bagInterfaceTestScript(DynArr *dyn) {
+    
+    printf("\n\nTesting bag interface...\n");
+    
+    printf("\nCreating DynArr with cap 99...\n");
+    dyn = createDynArr(99);
     
     deleteDynArr(dyn);
 }
@@ -222,6 +300,8 @@ int main(int argc, char* argv[]){
 
         deleteDynArr(dyn);
         dynArrTestScript(dyn);
+        stackInterfaceTestScript(dyn);
+        bagInterfaceTestScript(dyn);
     }
     
 	return 0;
